@@ -1,18 +1,17 @@
 import streamlit as st
 
 # 1. قراءة وتطبيق ملف الـ CSS الخاص بك
-# تم تغيير اسم الملف إلى "XO.css" ليتطابق تماماً مع الاسم المرفوع على مستودع GitHub الخاص بك
 try:
     with open("XO.css", "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
-    pass  # إذا لم يجد الملف فلا توجد مشكلة، لكنه سيجده الآن لأن الاسم متطابق
+    pass  
 
 # 2. تعريف الحالات الابتدائية للعبة في الـ Session State
 if 'board' not in st.session_state:
     st.session_state.board = [''] * 9
 if 'turn' not in st.session_state:
-    st.session_state.turn = 'Menna'  # تم تعديلها لتكون 'Menna' كلاعب أول بدلاً من النص الفارغ لتبدأ اللعبة فوراً
+    st.session_state.turn = 'Menna'  
 if 'winner' not in st.session_state:
     st.session_state.winner = None
 
@@ -33,9 +32,10 @@ st.title("Wlcome Nabil website\nGamePlay(X,o)")
 # التحقق من التعادل
 check_draw = '' not in st.session_state.board and not st.session_state.winner
 
-# عرض حالة اللعبة للمستخدم
+# عرض حالة اللعبة للمستخدم وتفعيل البلالين عند الفوز
 if st.session_state.winner:
     st.success(f"الفائز هو اللاعب: {st.session_state.winner}! 🎉")
+    st.balloons()  # 🎈 هذه الدالة السحرية ستقوم بإطلاق البلالين في الشاشة بأكملها فور الفوز!
 elif check_draw:
     st.info("النتيجة: تعادل! 🤝")
 else:
