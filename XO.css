@@ -1,0 +1,82 @@
+/* تنسيقات عامة للجسم والخلفية */
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    text-align: center;
+    background-color: #3f0000;
+    margin-top: 50px;
+}
+
+h1 {
+    color: #333;
+}
+h2 {
+    color: #042242;
+}
+
+/* نصوص الحالة (الدور الحالي، الفائز، التعادل) */
+.status {
+    font-size: 24px;
+    margin-bottom: 20px;
+    font-weight: bold;
+}
+
+/* لوحة اللعب (شاشة شبكية 3 في 3) */
+.board {
+    display: grid;
+    grid-template-columns: repeat(3, 100px);
+    grid-gap: 10px;
+    justify-content: center;
+    margin-bottom: 20px;
+}
+
+/* أزرار مربعات اللعبة */
+.cell-btn {
+    width: 100px;
+    height: 100px;
+    font-size: 36px;
+    font-weight: bold;
+    background-color: #fff;
+    border: 2px solid #ccc;
+    border-radius: 8px;
+    cursor: pointer;
+    transition: background 0.2s, transform 0.1s;
+}
+
+.cell-btn:hover {
+    background-color: #e9e9e9;
+}
+
+.cell-btn:active {
+    transform: scale(0.95);
+}
+
+/* الأزرار المقفولة بعد اللعب أو عند انتهاء الجيم */
+.cell-btn:disabled {
+    cursor: not-allowed;
+    background-color: #fcfcfc;
+}
+
+/* زر إعادة اللعب */
+.reset-btn {
+    padding: 10px 25px;
+    font-size: 18px;
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: background 0.2s;
+}
+
+.reset-btn:hover {
+    background-color: #0056b3;
+}
+
+/* ألوان نصوص النتيجة */
+.winner {
+    color: #28a745; /* أخضر عند الفوز */
+}
+
+.draw {
+    color: #dc3545; /* أحمر عند التعادل */
+}
