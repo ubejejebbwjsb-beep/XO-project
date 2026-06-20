@@ -1,17 +1,18 @@
 import streamlit as st
 
 # 1. قراءة وتطبيق ملف الـ CSS الخاص بك
+# تم تغيير اسم الملف إلى "XO.css" ليتطابق تماماً مع الاسم المرفوع على مستودع GitHub الخاص بك
 try:
     with open("XO.css", "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
-    pass  # إذا لم يجد الملف بعد فلا توجد مشكلة
+    pass  # إذا لم يجد الملف فلا توجد مشكلة، لكنه سيجده الآن لأن الاسم متطابق
 
-# 2. تعريف الحالات الابتدائية للعبة في الـ Session State (بديل game_compleate في فلاسك)
+# 2. تعريف الحالات الابتدائية للعبة في الـ Session State
 if 'board' not in st.session_state:
     st.session_state.board = [''] * 9
 if 'turn' not in st.session_state:
-    st.session_state.turn = ''#$$$$$(First play)$$$$$$$$$4
+    st.session_state.turn = 'Menna'  # تم تعديلها لتكون 'Menna' كلاعب أول بدلاً من النص الفارغ لتبدأ اللعبة فوراً
 if 'winner' not in st.session_state:
     st.session_state.winner = None
 
@@ -62,6 +63,6 @@ st.write("---")
 # زر إعادة الضبط (Reset)
 if st.button("إعادة اللعب 🔄"):
     st.session_state.board = [''] * 9
-    st.session_state.turn = 'Menna'############3
+    st.session_state.turn = 'Menna'
     st.session_state.winner = None
     st.rerun()
