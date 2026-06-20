@@ -2,7 +2,7 @@ import streamlit as st
 
 # 1. قراءة وتطبيق ملف الـ CSS الخاص بك
 try:
-    with open("web.css", "r", encoding="utf-8") as f:
+    with open("XO.css", "r", encoding="utf-8") as f:
         st.markdown(f"<style>{f.read()}</style>", unsafe_allow_html=True)
 except FileNotFoundError:
     pass  # إذا لم يجد الملف بعد فلا توجد مشكلة
