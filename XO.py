@@ -20,24 +20,19 @@ if 'turn' not in st.session_state:
     st.session_state.turn = 'X'  
 if 'winner' not in st.session_state:
     st.session_state.winner = None
-if 'win_line' not in st.session_state:
-    st.session_state.win_line = None  
+if 'winning_indices' not in st.session_state:
+    st.session_state.winning_indices = []  # لحفظ أرقام المربعات الثلاثة الفائزة
 
 def check_winner(board):
     win_conditions = [
-        [0, 1, 2], # 0: أفقي أول
-        [3, 4, 5], # 1: أفقي ثاني
-        [6, 7, 8], # 2: أفقي ثالث
-        [0, 3, 6], # 3: رأسي أول
-        [1, 4, 7], # 4: رأسي ثاني
-        [2, 5, 8], # 5: رأسي ثالث
-        [0, 4, 8], # 6: قطري رئيسي
-        [2, 4, 6]  # 7: قطري عكسي
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], # أفقي
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], # رأسي
+        [0, 4, 8], [2, 4, 6]              # قطري
     ]
-    for idx, condition in enumerate(win_conditions):
+    for condition in win_conditions:
         if board[condition[0]] == board[condition[1]] == board[condition[2]] != '':
-            return board[condition[0]], idx  
-    return None, None
+            return board[condition[0]], condition  # نُعيد الرمز والمربعات الثلاثة الفائزة
+    return None, []
 
 # ==========================================
 # الشاشة الأولى: صفحة تسجيل الدخول
@@ -80,35 +75,40 @@ else:
         current_player_name = players[st.session_state.turn]
         st.write(f"دور اللاعب الحالي: **{current_player_name} ({st.session_state.turn})**")
 
-    # 🌟 التعديل السحري هنا 🌟
-    # بدلاً من وضع الخط داخل ديف خارجي، نقوم بفتح حاوية مخصصة بالـ CSS المباشر لتثبيت العناصر الفوقية
-    st.markdown('<div class="board-container" style="position: relative; width: 100%;">', unsafe_allow_html=True)
-    
-    # حقن الخط الفائز مباشرة بداخل الحاوية
-    if st.session_state.win_line is not None:
-        st.markdown(f'<div class="winning-line line-{st.session_state.win_line}"></div>', unsafe_allow_html=True)
-
-    # بناء لوحة الـ XO داخل الحاوية المصححة
+    # بناء لوحة الـ XO
     for row in range(3):
         cols = st.columns(3)
         for col in range(3):
             idx = row * 3 + col
             button_label = st.session_state.board[idx] if st.session_state.board[idx] != '' else " "
             
+            # حيلة ذكية: إذا كان هذا المربع من ضمن المربعات الفائزة، نضع له كود مخصص لتلوينه
+            if idx in st.session_state.winning_indices:
+                button_label = f"✨ {button_label} ✨"
+                # حقن ستايل CSS مخصص لتلوين المربع الفائز باللون الأخضر النيون المضيء
+                st.markdown(f"""
+                <style>
+                div[data-testid="stHorizontalBlock"] button[key="btn_{idx}"] {{
+                    background: linear-gradient(135deg, #00ff87, #60efff) !important;
+                    color: #1e1e2f !important;
+                    border-color: #ffffff !important;
+                    box-shadow: 0 0 20px rgba(0, 255, 135, 0.8) !important;
+                }}
+                </style>
+                """, unsafe_allow_html=True)
+
             if cols[col].button(button_label, key=f"btn_{idx}", use_container_width=True):
                 if st.session_state.board[idx] == '' and not st.session_state.winner:
                     st.session_state.board[idx] = st.session_state.turn
                     
-                    winner, line_idx = check_winner(st.session_state.board)
+                    winner, winning_combo = check_winner(st.session_state.board)
                     if winner:
                         st.session_state.winner = winner
-                        st.session_state.win_line = line_idx
+                        st.session_state.winning_indices = winning_combo # حفظ المربعات الفائزة
                     
                     if not st.session_state.winner:
                         st.session_state.turn = 'O' if st.session_state.turn == 'X' else 'X'
                     st.rerun()
-                    
-    st.markdown('</div>', unsafe_allow_html=True) # إغلاق الحاوية
 
     st.write("---")
 
@@ -118,7 +118,7 @@ else:
             st.session_state.board = [''] * 9
             st.session_state.turn = 'X'
             st.session_state.winner = None
-            st.session_state.win_line = None  
+            st.session_state.winning_indices = []  # تصفير المربعات الفائزة
             st.rerun()
             
     with col2:
@@ -126,6 +126,6 @@ else:
             st.session_state.board = [''] * 9
             st.session_state.turn = 'X'
             st.session_state.winner = None
-            st.session_state.win_line = None  
+            st.session_state.winning_indices = []  
             st.session_state.game_started = False  
             st.rerun()
