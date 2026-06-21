@@ -46,3 +46,38 @@ div.stButton > button:not(div[data-testid="stHorizontalBlock"] button) {
     width: 100% !important;
     box-shadow: 0 4px 15px rgba(255, 75, 43, 0.3) !important;
 }
+/* إعداد حاوية اللوحة لتكون مرجعاً للخط المتنقل */
+.board-container {
+    position: relative;
+    display: block;
+}
+
+/* الإعدادات العامة لخط الفوز (مخفي افتراضياً، لونه أحمر ومتحرك) */
+.winning-line {
+    position: absolute;
+    background-color: #ff4b4b; /* لون الخط أحمر */
+    z-index: 99; /* ليكون فوق الأزرار */
+    border-radius: 5px;
+    transition: all 0.5s ease-in-out;
+}
+
+/* خطوط الفوز الأفقية */
+.line-0 { top: 15%; left: 5%; width: 90%; height: 6px; } /* الصف الأول */
+.line-1 { top: 48%; left: 5%; width: 90%; height: 6px; } /* الصف الثاني */
+.line-2 { top: 82%; left: 5%; width: 90%; height: 6px; } /* الصف الثالث */
+
+/* خطوط الفوز الرأسية */
+.line-3 { left: 16%; top: 5%; height: 90%; width: 6px; } /* العمود الأول */
+.line-4 { left: 50%; top: 5%; height: 90%; width: 6px; } /* العمود الثاني */
+.line-5 { left: 83%; top: 5%; height: 90%; width: 6px; } /* العمود الثالث */
+
+/* الخطوط القطرية (المائلة) */
+.line-6 { 
+    top: 50%; left: 5%; width: 90%; height: 6px; 
+    transform: translateY(-50%) rotate(45deg); 
+} /* من أعلى اليسار لأسفل اليمين */
+
+.line-7 { 
+    top: 50%; left: 5%; width: 90%; height: 6px; 
+    transform: translateY(-50%) rotate(-45deg); 
+} /* من أعلى اليمين لأسفل اليسار */
