@@ -27,7 +27,7 @@ div[data-testid="stHorizontalBlock"] button {
 
 /* تأثير عند تمرير الماوس فوق أزرار اللعبة */
 div[data-testid="stHorizontalBlock"] button:hover {
-    background-color: #00f2fe !important;
+    background-color: #000000 !important;
     color: #1e1e2f !important;
     border-color: #ffffff !important;
     transform: translateY(-3px);
