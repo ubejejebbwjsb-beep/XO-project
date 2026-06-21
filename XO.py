@@ -34,7 +34,7 @@ def check_winner(board):
     return None
 
 # عنوان اللعبة
-st.title("Wlcome Nabil website\nGamePlay(X,o)")
+st.title("Welcome Nabil website\nGamePlay(X,o)")
 
 # التحقق من التعادل
 check_draw = '' not in st.session_state.board and not st.session_state.winner
