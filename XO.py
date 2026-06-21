@@ -8,6 +8,13 @@ except FileNotFoundError:
     pass  
 
 # 2. تعريف الحالات الابتدائية للعبة في الـ Session State
+# 2. تعريف الحالات الابتدائية في الـ Session State
+if 'game_started' not in st.session_state:
+    st.session_state.game_started = False  # لمعرفة هل بدأوا اللعب أم لا
+if 'player_x' not in st.session_state:
+    st.session_state.player_x = "Menna"     # الاسم الافتراضي للاعب X
+if 'player_o' not in st.session_state:
+    st.session_state.player_o = "Malk"      # الاسم الافتراضي للاعب o
 if 'board' not in st.session_state:
     st.session_state.board = [''] * 9
 if 'turn' not in st.session_state:
