@@ -7,18 +7,17 @@ try:
 except FileNotFoundError:
     pass  
 
-# 2. تعريف الحالات الابتدائية للعبة في الـ Session State
 # 2. تعريف الحالات الابتدائية في الـ Session State
 if 'game_started' not in st.session_state:
-    st.session_state.game_started = False  # لمعرفة هل بدأوا اللعب أم لا
+    st.session_state.game_started = False  
 if 'player_x' not in st.session_state:
-    st.session_state.player_x = "Menna"     # الاسم الافتراضي للاعب X
+    st.session_state.player_x = "Menna"     
 if 'player_o' not in st.session_state:
-    st.session_state.player_o = "Malk"      # الاسم الافتراضي للاعب o
+    st.session_state.player_o = "Malk"      
 if 'board' not in st.session_state:
     st.session_state.board = [''] * 9
 if 'turn' not in st.session_state:
-    st.session_state.turn = 'Menna'  
+    st.session_state.turn = 'X'  
 if 'winner' not in st.session_state:
     st.session_state.winner = None
 
@@ -33,43 +32,80 @@ def check_winner(board):
             return board[condition[0]]
     return None
 
-# عنوان اللعبة
-st.title("Welcome Nabil website\nGamePlay(X,o)")
+# ==========================================
+# الشاشة الأولى: صفحة تسجيل الدخول
+# ==========================================
+if st.session_state.game_started == False:
+    st.title("Welcome to Nabil's Website 🎮")
+    st.subheader("تسجيل دخول اللاعبين")
+    
+    # رابط صورة اللعبة
+    game_image_url = "https://images.unsplash.com/photo-1611891404113-68d2f790bd9c?w=500" 
+    st.image(game_image_url, caption="جاهز للتحدي؟ 🔥", use_container_width=True)
+    
+    # حقول إدخال الأسماء
+    name_x = st.text_input("اسم اللاعب الأول (X):", value=st.session_state.player_x)
+    name_o = st.text_input("اسم اللاعب الثاني (O):", value=st.session_state.player_o)
+    
+    # زر بدء اللعبة
+    if st.button("إبدأ اللعب الآن 🚀", use_container_width=True):
+        if name_x.strip() == "" or name_o.strip() == "":
+            st.error("من فضلك أدخل أسماء اللاعبين أولاً!")
+        else:
+            st.session_state.player_x = name_x
+            st.session_state.player_o = name_o
+            st.session_state.game_started = True  
+            st.rerun()
 
-# التحقق من التعادل
-check_draw = '' not in st.session_state.board and not st.session_state.winner
-
-# عرض حالة اللعبة للمستخدم وتفعيل البلالين عند الفوز
-if st.session_state.winner:
-    st.success(f"الفائز هو اللاعب: {st.session_state.winner}! 🎉")
-    st.balloons()  # 🎈 هذه الدالة السحرية ستقوم بإطلاق البلالين في الشاشة بأكملها فور الفوز!
-elif check_draw:
-    st.info("النتيجة: تعادل! 🤝")
+# ==========================================
+# الشاشة الثانية: صفحة اللعبة (تظهر بعد تسجيل الدخول)
+# ==========================================
 else:
-    st.write(f"دور اللاعب الحالي: **{st.session_state.turn}**")
+    players = {'X': st.session_state.player_x, 'O': st.session_state.player_o}
+    st.title("GamePlay (X, O)")
+    
+    check_draw = '' not in st.session_state.board and not st.session_state.winner
 
-# بناء لوحة الـ XO (3 صفوف × 3 أعمدة)
-for row in range(3):
-    cols = st.columns(3)
-    for col in range(3):
-        idx = row * 3 + col
-        button_label = st.session_state.board[idx] if st.session_state.board[idx] != '' else " "
-        
-        # عند الضغط على المربع
-        if cols[col].button(button_label, key=f"btn_{idx}", use_container_width=True):
-            if st.session_state.board[idx] == '' and not st.session_state.winner:
-                st.session_state.board[idx] = st.session_state.turn
-                st.session_state.winner = check_winner(st.session_state.board)
-                
-                if not st.session_state.winner:
-                    st.session_state.turn = 'Malk' if st.session_state.turn == 'Menna' else 'Menna'
-                st.rerun()
+    if st.session_state.winner:
+        winner_name = players[st.session_state.winner]
+        st.success(f"الفائز هو اللاعب: {winner_name} ({st.session_state.winner})! 🎉")
+        st.balloons()  
+    elif check_draw:
+        st.info("النتيجة: تعادل! 🤝")
+    else:
+        current_player_name = players[st.session_state.turn]
+        st.write(f"دور اللاعب الحالي: **{current_player_name} ({st.session_state.turn})**")
 
-st.write("---")
+    # بناء لوحة الـ XO
+    for row in range(3):
+        cols = st.columns(3)
+        for col in range(3):
+            idx = row * 3 + col
+            button_label = st.session_state.board[idx] if st.session_state.board[idx] != '' else " "
+            
+            if cols[col].button(button_label, key=f"btn_{idx}", use_container_width=True):
+                if st.session_state.board[idx] == '' and not st.session_state.winner:
+                    st.session_state.board[idx] = st.session_state.turn
+                    st.session_state.winner = check_winner(st.session_state.board)
+                    
+                    if not st.session_state.winner:
+                        st.session_state.turn = 'O' if st.session_state.turn == 'X' else 'X'
+                    st.rerun()
 
-# زر إعادة الضبط (Reset)
-if st.button("إعادة اللعب 🔄"):
-    st.session_state.board = [''] * 9
-    st.session_state.turn = 'Menna'
-    st.session_state.winner = None
-    st.rerun()
+    st.write("---")
+
+    col1, col2 = st.columns(2)
+    with col1:
+        if st.button("إعادة اللعب 🔄", use_container_width=True):
+            st.session_state.board = [''] * 9
+            st.session_state.turn = 'X'
+            st.session_state.winner = None
+            st.rerun()
+            
+    with col2:
+        if st.button("تغيير اللاعبين وتسجيل الخروج 👥", use_container_width=True):
+            st.session_state.board = [''] * 9
+            st.session_state.turn = 'X'
+            st.session_state.winner = None
+            st.session_state.game_started = False  # إرجاع الشرط للوضع الافتراضي لعرض الدخول
+            st.rerun()
