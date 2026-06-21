@@ -38,7 +38,7 @@ def check_winner(board):
 # الشاشة الأولى: صفحة تسجيل الدخول
 # ==========================================
 if st.session_state.game_started == False:
-    st.title("Welcome to Nabil's Website 🎮")
+    st.title("💎💎  Welcome to Nabil's Website 💎💎")
     st.subheader("تسجيل دخول اللاعبين")
     
     game_image_url = "https://images.unsplash.com/photo-1611891404113-68d2f790bd9c?w=500" 
