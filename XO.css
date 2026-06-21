@@ -15,7 +15,7 @@ h1 {
 /* التنسيق السحري لأزرار لوحة الـ XO */
 div[data-testid="stHorizontalBlock"] button {
     background-color: #2e2e4f !important;
-    color: #00f2fe !important;
+     color: #15fe00 !important;
     border: 2px solid #3f3f74 !important;
     border-radius: 12px !important;
     height: 90px !important;
